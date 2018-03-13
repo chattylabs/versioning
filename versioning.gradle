@@ -1,0 +1,31 @@
+// Manage versioning
+
+def readVersion() {
+    def versionFile = new File(project.rootDir, 'version.properties')
+    def version = new Properties()
+    def stream
+    try {
+        stream = new FileInputStream(versionFile)
+        version.load(stream)
+    } catch (FileNotFoundException ignore) {
+    } finally {
+        if (stream != null) stream.close()
+    }
+    // safety defaults in case file is missing
+    if(!version['major']) version['major'] = "0"
+    if(!version['minor']) version['minor'] = "1"
+    if(!version['patch']) version['patch'] = "0"
+    if(!version['build']) version['build'] = "1"
+    return version
+}
+
+ext.readVersionName = {
+    def version = readVersion()
+    return "${version['major']}.${version['minor']}.${version['patch']}"
+}
+
+ext.readVersionCode = {
+    def version = readVersion()
+    def build = version['build'] as int
+    return build
+}
