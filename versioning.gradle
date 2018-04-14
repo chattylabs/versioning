@@ -12,20 +12,22 @@ def readVersion() {
         if (stream != null) stream.close()
     }
     // safety defaults in case file is missing
-    if(!version['major']) version['major'] = "0"
-    if(!version['minor']) version['minor'] = "1"
-    if(!version['patch']) version['patch'] = "0"
-    if(!version['build']) version['build'] = "1"
+    if(!version['major']) version['sdk'] = "00"
+    if(!version['major']) version['screen'] = "0"
+    if(!version['major']) version['major'] = "00"
+    if(!version['minor']) version['minor'] = "01"
+    if(!version['patch']) version['patch'] = "00"
     return version
 }
 
 ext.readVersionName = {
     def version = readVersion()
-    return "${version['major']}.${version['minor']}.${version['patch']}"
+    return "${version['major'] as int}.${version['minor'] as int}.${version['patch'] as int}"
 }
 
 ext.readVersionCode = {
     def version = readVersion()
-    def build = version['build'] as int
+    def build = (version['sdk'] + version['screen'] + version['major']
+            + version['minor'] + version['patch']) as int
     return build
 }
