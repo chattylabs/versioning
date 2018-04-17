@@ -1,7 +1,15 @@
 // Manage versioning
 
-static def readVersion() {
-    def versionFile = new File("version.properties")
+def File getVersionFile() {
+    def versionFile = new File(project.getProjectDir(), 'version.properties')
+    if (!versionFile.exists()) {
+        versionFile = new File(project.getRootDir(), 'version.properties')
+    }
+    return versionFile
+}
+
+def readVersion() {
+    def versionFile = getVersionFile()
     def version = new Properties()
     def stream
     try {
@@ -17,6 +25,10 @@ static def readVersion() {
     if(!version['major']) version['major'] = "00"
     if(!version['minor']) version['minor'] = "01"
     if(!version['patch']) version['patch'] = "00"
+
+    if (!versionFile.exists()) {
+        generateProperties(version)
+    }
     return version
 }
 
@@ -30,4 +42,75 @@ ext.readVersionCode = {
     def build = (version['sdk'] + version['screen'] + version['major']
             + version['minor'] + version['patch']) as int
     return build
+}
+
+def generateProperties(version) {
+    def versionFile = new File(project.getRootDir(), 'version.properties')
+    def stream = new FileOutputStream(versionFile)
+    try {
+        version.store(stream, null)
+    } finally {
+        if (stream != null) stream.close()
+    }
+}
+
+def updateProperty(key, value) {
+    def versionFile = getVersionFile()
+    def version = readVersion()
+    version[key] = value.toString()
+    def stream = new FileOutputStream(versionFile)
+    try {
+        version.store(stream, null)
+    } finally {
+        if (stream != null) stream.close()
+    }
+}
+
+def incrementVersionNumber(type="minor") {
+    def version = readVersion()
+    def major = version['major'] as int
+    def minor = version['minor'] as int
+    def patch = version['patch'] as int
+    if (type == 'major') {
+        major++
+        minor = 0
+    } else if (type == 'minor') {
+        minor++
+    } else if (type == 'patch') {
+        patch++
+    }
+    if (type == 'patch' && patch >= 100) {
+        minor++
+        patch = 0
+    } else if (type == 'minor' && minor >= 100) {
+        major++
+        minor = 0
+        patch = 0
+    }
+    updateProperty('major', major < 10 ? '0' + major : major.toString())
+    updateProperty('minor', minor < 10 ? '0' + minor : minor.toString())
+    updateProperty('patch', patch < 10 ? '0' + patch : patch.toString())
+    println "Version is now... " + readVersionName()
+    return readVersionName()
+}
+
+task doMinorVersionIncrement() {
+    doLast {
+        println "Incrementing minor version..."
+        incrementVersionNumber('minor')
+    }
+}
+
+task doPatchVersionIncrement() {
+    doLast {
+        println "Incrementing patch version..."
+        incrementVersionNumber('patch')
+    }
+}
+
+task doUpdateVersion() {
+    doLast {
+        println "Incrementing " + key + " version to " + value
+        updateProperty(key, value)
+    }
 }
