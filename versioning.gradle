@@ -1,7 +1,7 @@
 // Manage versioning
 
-def readVersion() {
-    def versionFile = new File("${project.name}-version.properties")
+static def readVersion() {
+    def versionFile = new File("version.properties")
     def version = new Properties()
     def stream
     try {
