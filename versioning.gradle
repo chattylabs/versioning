@@ -1,6 +1,6 @@
 // Manage versioning
 
-def File getVersionFile() {
+File getVersionFile() {
     def versionFile = new File(project.getProjectDir(), 'version.properties')
     if (!versionFile.exists()) {
         versionFile = new File(project.getRootDir(), 'version.properties')
