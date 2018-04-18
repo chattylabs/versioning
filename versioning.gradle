@@ -40,10 +40,14 @@ ext.readVersionName = {
 }
 
 ext.readVersionCode = {
+    return readVersionCodeAsString() as int
+}
+
+ext.readVersionCodeAsString = {
     project.logger.info('Reading version code...')
     def version = readVersion()
     def build = (version['sdk'] + version['screen'] + version['major']
-            + version['minor'] + version['patch']) as int
+            + version['minor'] + version['patch'])
     return build
 }
 
