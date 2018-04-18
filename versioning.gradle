@@ -20,24 +20,27 @@ def readVersion() {
         if (stream != null) stream.close()
     }
     // safety defaults in case file is missing
-    if(!version['major']) version['sdk'] = "00"
-    if(!version['major']) version['screen'] = "0"
+    if(!version['sdk']) version['sdk'] = "00"
+    if(!version['screen']) version['screen'] = "0"
     if(!version['major']) version['major'] = "00"
     if(!version['minor']) version['minor'] = "01"
     if(!version['patch']) version['patch'] = "00"
 
     if (!versionFile.exists()) {
+        project.logger.lifecycle('Generating new property version file...')
         generateProperties(version)
     }
     return version
 }
 
 ext.readVersionName = {
+    project.logger.info('Reading version name...')
     def version = readVersion()
     return "${version['major'] as int}.${version['minor'] as int}.${version['patch'] as int}"
 }
 
 ext.readVersionCode = {
+    project.logger.info('Reading version code...')
     def version = readVersion()
     def build = (version['sdk'] + version['screen'] + version['major']
             + version['minor'] + version['patch']) as int
@@ -90,27 +93,27 @@ def incrementVersionNumber(type="minor") {
     updateProperty('major', major < 10 ? '0' + major : major.toString())
     updateProperty('minor', minor < 10 ? '0' + minor : minor.toString())
     updateProperty('patch', patch < 10 ? '0' + patch : patch.toString())
-    println "Version is now... " + readVersionName()
+    project.logger.lifecycle('Version is now... ' + readVersionName())
     return readVersionName()
 }
 
 task doMinorVersionIncrement() {
     doLast {
-        println "Incrementing minor version..."
-        incrementVersionNumber('minor')
+        project.logger.lifecycle('Incrementing minor version...')
+        print incrementVersionNumber('minor')
     }
 }
 
 task doPatchVersionIncrement() {
     doLast {
-        println "Incrementing patch version..."
-        incrementVersionNumber('patch')
+        project.logger.lifecycle('Incrementing patch version...')
+        print incrementVersionNumber('patch')
     }
 }
 
 task doUpdateVersion() {
     doLast {
-        println "Incrementing " + key + " version to " + value
+        project.logger.lifecycle('Incrementing ' + key + ' version to ' + value)
         updateProperty(key, value)
     }
 }
