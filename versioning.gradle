@@ -62,9 +62,10 @@ def generateProperties(version) {
 }
 
 def updateProperty(key, value) {
-    def versionFile = getVersionFile()
     def version = readVersion()
-    version[key] = value.toString()
+    def versionFile = getVersionFile()
+    def versionValue = (value as int) < 10 ? '0' + value : value.toString()
+    version[key] = versionValue
     def stream = new FileOutputStream(versionFile)
     try {
         version.store(stream, null)
@@ -94,9 +95,9 @@ def incrementVersionNumber(type="minor") {
         minor = 0
         patch = 0
     }
-    updateProperty('major', major < 10 ? '0' + major : major.toString())
-    updateProperty('minor', minor < 10 ? '0' + minor : minor.toString())
-    updateProperty('patch', patch < 10 ? '0' + patch : patch.toString())
+    updateProperty('major', major)
+    updateProperty('minor', minor)
+    updateProperty('patch', patch)
     project.logger.lifecycle('Version is now... ' + readVersionName())
     return readVersionName()
 }
