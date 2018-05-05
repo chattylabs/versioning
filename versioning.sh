@@ -17,7 +17,7 @@ STORE_FILE_PATH=""
 
 # Update all
 git fetch --all --prune
-git submodule update --init
+git submodule update --init --recursive
 
 original_version_number=""
 is_new=false
