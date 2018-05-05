@@ -4,57 +4,57 @@ set -e
 # debug log
 #set -x
 
-DEFAULT_VERSION="0.1.0"
-VERSION_PREFIX="version/"
-FEATURE_COMMIT_MESSAGE_PATTERN="^Feature"
-PATCH_COMMIT_MESSAGE_PATTERN="^Bug"
-VERSION_UPGRADE_MESSAGE="Automatic Version Upgrade [skip ci]"
+if [ $# -lt 3 ]; then
+    echo "You need to provide 3 arguments"
+    exit 1
+fi
 
-KEY_ALIAS=""
-KEY_PASSWORD=""
-STORE_PASSWORD=""
-STORE_FILE_PATH=""
+DEFAULT_VERSION="0.1.0"
+
+version_prefix=$1
+feature_commit_pattern=$2
+patch_commit_pattern=$3
 
 # Update all
-git fetch --all --prune
+git fetch --all --prune &> /dev/null
 
-original_version_number=""
+original_version=""
 is_new=false
 
 # Check for versions
-git rev-parse HEAD
-project=`git describe --tags --all --always --long --match "$VERSION_PREFIX[0-99]*" HEAD`
+git rev-parse HEAD &> /dev/null
+project=`git describe --tags --all --always --long --match "$version_prefix[0-99]*" HEAD`
 
-if [[ ${project} =~ .*$VERSION_PREFIX[0-99]+\.[0-99]+\.[0-99]+.* ]]; then
-  original_version_number=${project##tags/}
-  original_version_number=${original_version_number##"$VERSION_PREFIX"}
-  original_version_number=${original_version_number%%-*}
+if [[ ${project} =~ .*$version_prefix[0-99]+\.[0-99]+\.[0-99]+.* ]]; then
+  original_version=${project##tags/}
+  original_version=${original_version##"$version_prefix"}
+  original_version=${original_version%%-*}
 fi
-if [[ -z "$original_version_number" ]]; then
-  original_version_number=${DEFAULT_VERSION}
+if [[ -z "$original_version" ]]; then
+  original_version=${DEFAULT_VERSION}
   is_new=true
+else
+  last_version_commit_id=`git rev-list -n 1 "$version_prefix$original_version"`
 fi
 
-IFS=\. read major minor patch <<< "$original_version_number"
+IFS=\. read major minor patch <<< "$original_version"
 
 number_of_features=0
 number_of_patches=0
 
 if [[ "$is_new" != true ]]; then
   # It does contain previous versions
-  last_upraged_commit_id=`git log -1 --pretty=%h \
-  --grep "$VERSION_UPGRADE_MESSAGE" --fixed-strings`
-  number_of_features=`git rev-list ${last_upraged_commit_id}..HEAD \
-  --grep "$FEATURE_COMMIT_MESSAGE_PATTERN" --count`
+  number_of_features=`git rev-list ${last_version_commit_id}..HEAD \
+  --grep "$feature_commit_pattern" --count`
   if [[ ${number_of_features} == 0 ]]; then
     # No previous features
-    number_of_patches=`git rev-list ${last_upraged_commit_id}..HEAD \
-    --grep "$PATCH_COMMIT_MESSAGE_PATTERN" --count`
+    number_of_patches=`git rev-list ${last_version_commit_id}..HEAD \
+    --grep "$patch_commit_pattern" --count`
   else
     last_feature_commit_id=`git rev-list -1 --grep \
-    "$FEATURE_COMMIT_MESSAGE_PATTERN" ${last_upraged_commit_id}..HEAD --abbrev-commit`
+    "$feature_commit_pattern" ${last_version_commit_id}..HEAD --abbrev-commit`
     number_of_patches=`git rev-list ${last_feature_commit_id}..HEAD \
-    --grep "$PATCH_COMMIT_MESSAGE_PATTERN" --count`
+    --grep "$patch_commit_pattern" --count`
   fi
 fi
 
@@ -63,12 +63,7 @@ patch=$(($patch + $number_of_patches))
 
 final_version="$major.$minor.$patch"
 
-# Push version changes
-if [[ "$final_version" > "$original_version_number" ]]; then
-  ./gradlew doUpdateVersion -Pkey=minor -Pvalue=${minor} --quiet
-  ./gradlew doUpdateVersion -Pkey=patch -Pvalue=${patch} --quiet
-  git add ./version.properties
-  git commit -m "<$VERSION_PREFIX$final_version> $VERSION_UPGRADE_MESSAGE"
-  git tag "$VERSION_PREFIX$final_version"
-  git push --tags origin HEAD
-fi
+./gradlew doUpdateVersion -Pkey=minor -Pvalue=${minor} --quiet &> /dev/null
+./gradlew doUpdateVersion -Pkey=patch -Pvalue=${patch} --quiet &> /dev/null
+
+echo "$final_version|$original_version"
