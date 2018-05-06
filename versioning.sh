@@ -2,7 +2,7 @@
 # fail if any commands fails
 set -e
 # debug log
-#set -x
+set -x
 
 if [ $# -lt 3 ]; then
     echo "You need to provide 3 arguments"
