@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 # fail if any commands fails
 set -e
 # debug log
