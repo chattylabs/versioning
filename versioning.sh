@@ -55,6 +55,7 @@ if [[ "$is_new" != true ]]; then
     "$feature_commit_pattern" ${last_version_commit_id}..HEAD --abbrev-commit`
     number_of_patches=`git rev-list ${last_feature_commit_id}..HEAD \
     --grep "$patch_commit_pattern" --count`
+    patch=0
   fi
 fi
 
