@@ -17,10 +17,12 @@ version_upgrade_message=$5
 
 IFS=\. read major minor patch <<< "$final_version"
 
-# Update internal stored APK version
-rm -f -r ./apk-version
-mkdir -p ./apk-version/${final_version}/mapping/release/
-cp ${mapping_path} ./apk-version/${final_version}/mapping/release/
+if [[ ! -z "$mapping_path" ]]; then
+    # Update internal stored APK version
+    rm -f -r ./apk-version
+    mkdir -p ./apk-version/${final_version}/mapping/release/
+    cp ${mapping_path} ./apk-version/${final_version}/mapping/release/
+fi
 
 # Push version changes
 git status
