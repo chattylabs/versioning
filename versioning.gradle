@@ -102,23 +102,25 @@ def incrementVersionNumber(type="minor") {
     return readVersionName()
 }
 
-task doMinorVersionIncrement() {
-    doLast {
-        project.logger.lifecycle('Incrementing minor version...')
-        print incrementVersionNumber('minor')
+allprojects {
+    task doMinorVersionIncrement() {
+        doLast {
+            project.logger.lifecycle('Incrementing minor version...')
+            print incrementVersionNumber('minor')
+        }
     }
-}
 
-task doPatchVersionIncrement() {
-    doLast {
-        project.logger.lifecycle('Incrementing patch version...')
-        print incrementVersionNumber('patch')
+    task doPatchVersionIncrement() {
+        doLast {
+            project.logger.lifecycle('Incrementing patch version...')
+            print incrementVersionNumber('patch')
+        }
     }
-}
 
-task doUpdateVersion() {
-    doLast {
-        project.logger.lifecycle('Incrementing ' + key + ' version to ' + value)
-        updateProperty(key, value)
+    task doUpdateVersion() {
+        doLast {
+            project.logger.lifecycle('Incrementing ' + key + ' version to ' + value)
+            updateProperty(key, value)
+        }
     }
 }
