@@ -43,16 +43,17 @@ number_of_patches=0
 # It does contain previous versions
 number_of_features=`git rev-list ${last_version_commit_id}..HEAD \
 --grep "$feature_commit_pattern" --count`
+
 if [[ ${number_of_features} == 0 ]]; then
-# No previous features
-number_of_patches=`git rev-list ${last_version_commit_id}..HEAD \
---grep "$patch_commit_pattern" --count`
+    # No previous features
+    number_of_patches=`git rev-list ${last_version_commit_id}..HEAD \
+    --grep "$patch_commit_pattern" --count`
 else
-last_feature_commit_id=`git rev-list -1 --grep \
-"$feature_commit_pattern" ${last_version_commit_id}..HEAD --abbrev-commit`
-number_of_patches=`git rev-list ${last_feature_commit_id}..HEAD \
---grep "$patch_commit_pattern" --count`
-patch=0
+    last_feature_commit_id=`git rev-list -1 --grep \
+    "$feature_commit_pattern" ${last_version_commit_id}..HEAD --abbrev-commit`
+    number_of_patches=`git rev-list ${last_feature_commit_id}..HEAD \
+    --grep "$patch_commit_pattern" --count`
+    patch=0
 fi
 
 minor=$(($minor + $number_of_features))
