@@ -32,7 +32,7 @@ if [[ -z "$original_version" ]]; then
   echo "You need to create a version tag first"
   exit 1
 else
-  last_version_commit_id=`git rev-list -n 1 "$version_prefix/$original_version"`
+  last_version_commit_id=`git rev-list -n 1 "$version_prefix/$original_version" --`
 fi
 
 IFS=\. read major minor patch <<< "$original_version"
