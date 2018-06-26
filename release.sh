@@ -18,15 +18,15 @@ version_upgrade_message=$5
 IFS=\. read major minor patch <<< "$final_version"
 
 if [[ ! -z "$mapping_path" ]]; then
-    # Update internal stored APK version
-    rm -f -r ./apk-version
-    mkdir -p ./apk-version/${final_version}/mapping/release/
-    cp ${mapping_path} ./apk-version/${final_version}/mapping/release/
+    # Update internal stored version
+    rm -f -r ./${version_tag_prefix}
+    mkdir -p ./${version_tag_prefix}/${final_version}/mapping/release/
+    cp ${mapping_path} ./${version_tag_prefix}/${final_version}/mapping/release/
 fi
 
 # Push version changes
 git status
 git add .
-git commit -m "<$version_tag_prefix$final_version> $version_upgrade_message"
-git tag "$version_tag_prefix$final_version"
+git commit -m "<$version_tag_prefix/$final_version> $version_upgrade_message"
+git tag "$version_tag_prefix/$final_version"
 git push --tags origin HEAD:${main_branch}

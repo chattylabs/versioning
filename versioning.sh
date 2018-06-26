@@ -20,11 +20,11 @@ original_version=""
 
 # Check for versions
 git rev-parse HEAD &> /dev/null
-project=`git describe --tags --all --always --long --match "$version_prefix[0-99]*" HEAD`
+project=`git describe --tags --all --always --long --match "$version_prefix/[0-99]*" HEAD`
 
-if [[ ${project} =~ .*$version_prefix[0-99]+\.[0-99]+\.[0-99]+.* ]]; then
+if [[ ${project} =~ .*$version_prefix/[0-99]+\.[0-99]+\.[0-99]+.* ]]; then
   original_version=${project##tags/}
-  original_version=${original_version##"$version_prefix"}
+  original_version=${original_version##"$version_prefix/"}
   original_version=${original_version%%-*}
 fi
 
@@ -32,7 +32,7 @@ if [[ -z "$original_version" ]]; then
   echo "You need to create a version tag first"
   exit 1
 else
-  last_version_commit_id=`git rev-list -n 1 "$version_prefix$original_version"`
+  last_version_commit_id=`git rev-list -n 1 "$version_prefix/$original_version"`
 fi
 
 IFS=\. read major minor patch <<< "$original_version"
