@@ -1,4 +1,4 @@
-package com.example.model
+package com.chattylabs.plugin.model
 
 class Version {
     private String major

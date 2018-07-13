@@ -12,8 +12,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 28
         versionCode Integer.parseInt(Versioning.version.getMajorVersion())
-//        versionName "1.0.2-rc-snapshot"
-        versionName "sometho"
+        versionName "todo"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

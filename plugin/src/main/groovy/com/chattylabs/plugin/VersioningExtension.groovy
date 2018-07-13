@@ -1,7 +1,7 @@
-package com.example.gradle.plugin.extension
+package com.chattylabs.plugin
 
-import com.example.model.Version
-import com.example.model.VersionSettings
+import com.chattylabs.plugin.model.Version
+import com.chattylabs.plugin.model.VersionSettings
 import org.gradle.api.Action
 
 class VersioningExtension {

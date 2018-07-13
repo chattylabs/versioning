@@ -1,7 +1,6 @@
-package com.example.gradle.plugin
+package com.chattylabs.plugin
 
-import com.example.gradle.plugin.extension.VersioningExtension
-import com.example.model.Version
+import com.chattylabs.plugin.model.Version
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -14,7 +13,6 @@ class VersioningPlugin implements Plugin<Project> {
 
     def loadVersionProperties(Project module) {
         def vProp = new File("${module.getProjectDir().absolutePath}/versioning.properties")
-        println("Path -- ${vProp.absolutePath}")
         if (!vProp.exists()) {
             createPropertyIfRequired(vProp)
         }
@@ -30,12 +28,11 @@ class VersioningPlugin implements Plugin<Project> {
 
     def createPropertyIfRequired(File outFile) {
         def propertiesToWrite = new Properties()
-        propertiesToWrite
-                .load(this.class.getResourceAsStream("/file/default_version.properties"))
+        propertiesToWrite.load(this.class.getResourceAsStream("/file/default_version.properties"))
         propertiesToWrite.store(new FileOutputStream(outFile), "Default write")
     }
 
-    Properties getVersionProperties(File inFile) {
+    private static Properties getVersionProperties(File inFile) {
         def properties = new Properties()
         properties.load(new FileInputStream(inFile))
         return properties
