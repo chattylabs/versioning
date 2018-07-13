@@ -1,0 +1,1 @@
+# gradle-versioning-plugin
