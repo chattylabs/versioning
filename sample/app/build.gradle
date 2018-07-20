@@ -11,8 +11,8 @@ android {
         applicationId "nodomain.intouch.versioningsample"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode Integer.parseInt(Versioning.version.getMajorVersion())
-        versionName "todo"
+        versionCode 0
+        versionName versioning.version()
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -21,11 +21,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+}
 
-    Versioning {
-        settings {
+versioning {
+    versionSetting {
+        tagPrefix "version/"
+        majorVersionKeys 'new'
+        minorVersionKeys "[bug]"
+        patchVersionKeys "[patch]"
+    }
 
-        }
+    gitSetting {
+        dir new File("/Users/surtamil/Desktop/Suryavel/GIT/tag_filter")
     }
 }
 

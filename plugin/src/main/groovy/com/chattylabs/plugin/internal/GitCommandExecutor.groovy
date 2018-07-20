@@ -56,6 +56,18 @@ class GitCommandExecutor {
         executeGitCommand(commands, successListener, failureListener)
     }
 
+    static ArrayList<String> getCommitList(String[] msgKeywords, String fromCommit, String toCommit = "HEAD") {
+        String grepCommand = CommandUtil.formGrepTemplate(1, msgKeywords.length)
+        // TODO: Add a logger and print (helpful)
+//        println "Grep -- Command -- $grepCommand \n commit list : $fromCommit..$toCommit"
+        ArrayList<String> commitList = null
+        revList("$fromCommit..$toCommit $grepCommand",
+                msgKeywords, {
+            commitList = it.split("\\n").findAll { it.length() == 40 }
+        })
+        return commitList
+    }
+
     private static void executeGitCommand(List<String> commandToExecute,
                                           OnGitCommandSuccess successListener = null,
                                           OnGitCommandFailure failureListener = new DefaultOnGitCommandFailure()) {

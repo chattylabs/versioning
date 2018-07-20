@@ -1,6 +1,7 @@
 package com.chattylabs.plugin
 
 import com.chattylabs.plugin.model.Version
+import com.chattylabs.plugin.model.VersionSettings
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -18,12 +19,14 @@ class VersioningPlugin implements Plugin<Project> {
         }
 
         // Load Versioning
-        def versioning = module.extensions.create("Versioning", VersioningExtension.class,
+        def versioning = module.extensions.create("versioning", VersioningExtension.class,
                 new Version(getVersionProperties(vProp)))
 
         module.afterEvaluate {
             // TODO : Handle versioning settings
         }
+
+        module.tasks.create("upgrade", VersioningTask.class)
     }
 
     def createPropertyIfRequired(File outFile) {

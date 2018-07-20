@@ -14,13 +14,20 @@ class CommandUtil {
                 def matcher = specifierFinder.matcher(it)
                 while (matcher.find()) {
                     command = command.replaceFirst("%${matcher.group(1)}\\\$s",
-                            input[matcher.group(1).toInteger() - 1])
+                            disableRegExChars(input[matcher.group(1).toInteger() - 1]))
                 }
                 commands.add(command)
             }
         }
 
+        // TODO: Add a logger and print (helpful)
+//        println "Commands : $commands -- template ${template}"
         return commands ?: template.split(" ").toList()
+    }
+
+    static String disableRegExChars(String text) {
+        return text.replace("[","\\\\[")
+        .replace("]", "\\\\]")
     }
 
     static String formGrepTemplate(int startIndex, int length) {
