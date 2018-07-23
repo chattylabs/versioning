@@ -1,45 +1,41 @@
 package com.chattylabs.plugin
 
 import com.chattylabs.plugin.internal.GitCommandExecutor
-import com.chattylabs.plugin.model.GitSettings
 import com.chattylabs.plugin.model.VersionSettings
-import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.TaskAction
+import com.chattylabs.plugin.util.PluginUtil
+import org.gradle.api.Project
 
-class VersioningTask extends DefaultTask {
+class VersioningTask {
 
-    GitSettings gitSettings = null
     VersionSettings versioningSetting = null
-
+    VersioningExtension versioningExtension = null
     String currentVersion = null
     String versionPrefix = null
-    int[] newVersion = new int[3]
+    Project project = null
+    int[] newVersion
 
-    @Override
-    String getGroup() {
-        return "versioning"
+    VersioningTask(Project p) {
+        this.project = p
     }
 
-    @TaskAction
     def performAction() {
-        VersioningExtension versioningExtension = (project.property("versioning") as VersioningExtension)
+        versioningExtension = (project.property("versioning") as VersioningExtension)
         versioningSetting = versioningExtension.versionSettings()
-        gitSettings = versioningExtension.gitSettings()
 
         readCurrentVersionTag()
         calculateNewVersion()
 
-        println "newversion ${newVersion}"
+        versioningExtension.versionByManipulation(false).setMajor(newVersion[0])
+        versioningExtension.versionByManipulation(false).setMinor(newVersion[1])
+        versioningExtension.versionByManipulation(false).setPatch(newVersion[2])
+        versioningExtension.versionByManipulation(false).save(PluginUtil.getSavedVersionProperty(project))
+
+        println "new version ${newVersion}"
     }
 
-    void readCurrentVersionTag() {
+    private void readCurrentVersionTag() {
 
         versionPrefix = versioningSetting.getPrefix() ?: ""
-
-        // TODO: Assuming we rootProject rootDir has .git folder. We need to change this logic.
-        // We can provide gradle option to set this directory if it is other than root has .git.
-        GitCommandExecutor.setGitDir(gitSettings.dir() ?: project.rootProject.rootDir)
-//        GitCommandExecutor.setGitDir(new File("/Users/surtamil/Desktop/Suryavel/GIT/tag_filter"))
 
         def regEx = "^tags[/]${versionPrefix.replace("/", "[/]")}.*"
         GitCommandExecutor.describeTags(versionPrefix, {
@@ -48,20 +44,20 @@ class VersioningTask extends DefaultTask {
                 currentVersion = it.replaceFirst("-.*\$", "")
                         .replaceFirst("^tags[/]${versionPrefix.replace("/", "[/]")}", "")
                         .replace("\n", "")
-                println currentVersion
             } else {
                 throw new RuntimeException("Invalid tag $it")
             }
         })
 
         newVersion = splitVersion(currentVersion)
+        println "Current Version ${newVersion}"
     }
 
-    void calculateNewVersion() {
+    private void calculateNewVersion() {
         calculateMajor()
     }
 
-    void calculateMajor() {
+    private void calculateMajor() {
         if (!versioningSetting.hasMajorKeys()) {
             calculateMinor()
             return
@@ -75,7 +71,7 @@ class VersioningTask extends DefaultTask {
         calculateMinor(majorCommits.size() > 0 ? majorCommits.get(0) : getLastTagCommit())
     }
 
-    void calculateMinor(String previousMajorCommit = getLastTagCommit()) {
+    private void calculateMinor(String previousMajorCommit = getLastTagCommit()) {
         if (!versioningSetting.hasMinorKeys()) {
             calculatePatch()
             return
@@ -90,7 +86,7 @@ class VersioningTask extends DefaultTask {
         calculatePatch(minorCommits.size() > 0 ? minorCommits.get(0) : getLastTagCommit())
     }
 
-    void calculatePatch(String previousMinorCommit = getLastTagCommit()) {
+    private void calculatePatch(String previousMinorCommit = getLastTagCommit()) {
         if (!versioningSetting.hasPatchKeys()) {
             return
         }
@@ -104,14 +100,14 @@ class VersioningTask extends DefaultTask {
     }
 
     // TODO : move this method to common util
-    static int[] splitVersion(String version) {
+    private static int[] splitVersion(String version) {
         return [version.find("^\\d+").toInteger(),
                 version.find("\\.\\d+\\.").find("\\d+").toInteger(),
                 version.find("\\d+\$").toInteger()]
     }
 
     // TODO: move this to GitHelper
-    String getLastTagCommit() {
+    private String getLastTagCommit() {
         String tagCommit = null
         GitCommandExecutor.revParse("$versionPrefix$currentVersion", {
             tagCommit = it.replace("\n", "")

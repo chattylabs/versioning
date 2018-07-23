@@ -1,7 +1,5 @@
 package com.chattylabs.plugin.model
 
-import org.gradle.api.Project
-
 class Version {
 
     static String MAJOR = "major"
@@ -24,40 +22,40 @@ class Version {
         return versionMap.get(MAJOR)
     }
 
-    void setMajor(String major) {
-        versionMap.put(MAJOR, major)
+    void setMajor(int major) {
+        versionMap.put(MAJOR, "$major".toString())
     }
 
     String getMinor() {
         return versionMap.get(MINOR)
     }
 
-    void setMinor(String minor) {
-        versionMap.put(MINOR, minor)
+    void setMinor(int minor) {
+        versionMap.put(MINOR, "$minor".toString())
     }
 
     String getPatch() {
         return versionMap.get(PATCH)
     }
 
-    void setPatch(String patch) {
-        versionMap.put(PATCH, patch)
+    void setPatch(int patch) {
+        versionMap.put(PATCH, "$patch".toString())
     }
 
     String getSdk() {
         return versionMap.get(SDK)
     }
 
-    void setSdk(String sdk) {
-        versionMap.put(SDK, sdk)
+    void setSdk(int sdk) {
+        versionMap.put(SDK, "$sdk".toString())
     }
 
     String getScreen() {
         return versionMap.get(SCREEN)
     }
 
-    String setScreen(String screen) {
-        versionMap.put(SCREEN, screen)
+    void setScreen(int screen) {
+        versionMap.put(SCREEN, "$screen".toString())
     }
 
     Map<String, String> getAll() {
