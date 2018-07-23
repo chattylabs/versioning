@@ -6,7 +6,7 @@ class GitCommandExecutor {
 
     static void setGitDir(File directory) {
         if (!directory.isDirectory() || !new File(directory.absolutePath + "/.git").exists()) {
-            throw new RuntimeException("Not a valid Git directory")
+            throw new RuntimeException("${directory} is not a valid Git directory")
         }
 
         gitDir = directory

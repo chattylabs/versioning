@@ -15,20 +15,8 @@ class VersioningExtension {
         this.version = version
     }
 
-    String majorVersion() {
-        return version.majorVersion
-    }
-
-    String minorVersion() {
-        return version.minorVersion
-    }
-
-    String patchVersion() {
-        return version.patchVersion
-    }
-
     String version() {
-        return "${majorVersion()}.${minorVersion()}.${patchVersion()}"
+        return this.version
     }
 
     void versionSetting(Action<? super VersionSettings> settingsAction) {

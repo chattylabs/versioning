@@ -3,11 +3,8 @@ package com.chattylabs.plugin.model
 class VersionSettings {
 
     String prefix
-
     String[] keywordsMajor
-
     String[] keywordsMinor
-
     String[] keywordsPatch
 
     void tagPrefix(String p) {

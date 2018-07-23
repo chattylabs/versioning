@@ -12,32 +12,17 @@ class VersioningPlugin implements Plugin<Project> {
         loadVersionProperties(project)
     }
 
-    def loadVersionProperties(Project module) {
-        def vProp = new File("${module.getProjectDir().absolutePath}/versioning.properties")
-        if (!vProp.exists()) {
-            createPropertyIfRequired(vProp)
-        }
+    def loadVersionProperties(Project project) {
+        def vProp = new File("${project.getProjectDir().absolutePath}/versioning.properties")
 
         // Load Versioning
-        def versioning = module.extensions.create("versioning", VersioningExtension.class,
-                new Version(getVersionProperties(vProp)))
+        def versioning = project.extensions.create("versioning", VersioningExtension.class,
+                Version.load(vProp))
 
-        module.afterEvaluate {
+        project.afterEvaluate {
             // TODO : Handle versioning settings
         }
 
-        module.tasks.create("upgrade", VersioningTask.class)
-    }
-
-    def createPropertyIfRequired(File outFile) {
-        def propertiesToWrite = new Properties()
-        propertiesToWrite.load(this.class.getResourceAsStream("/file/default_version.properties"))
-        propertiesToWrite.store(new FileOutputStream(outFile), "Default write")
-    }
-
-    private static Properties getVersionProperties(File inFile) {
-        def properties = new Properties()
-        properties.load(new FileInputStream(inFile))
-        return properties
+        project.tasks.create("upgrade", VersioningTask.class)
     }
 }
