@@ -5,6 +5,19 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'versioning-plugin'
 
+versioning {
+    versionSetting {
+        tagPrefix "version/"
+        majorVersionKeys '[new]'
+        minorVersionKeys "[patch]"
+        patchVersionKeys "[bug]"
+    }
+
+    gitSetting {
+        dir new File("/Users/surtamil/Desktop/Suryavel/GIT/tag_filter")
+    }
+}
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -20,19 +33,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-    }
-}
-
-versioning {
-    versionSetting {
-        tagPrefix "version/"
-        majorVersionKeys 'new'
-        minorVersionKeys "[bug]"
-        patchVersionKeys "[patch]"
-    }
-
-    gitSetting {
-        dir new File("/Users/surtamil/Desktop/Suryavel/GIT/tag_filter")
     }
 }
 
