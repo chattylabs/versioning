@@ -4,6 +4,8 @@ about: Suggest an idea or something that needs to be improved
 
 ---
 
+(Please remove the parts you think are not needed)
+
 **Is your feature request related to a problem? Please describe.**
 _A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]_
 

@@ -4,6 +4,8 @@ about: Create a report to help us improve
 
 ---
 
+(Please remove the parts you think are not needed)
+
 **Describe the bug**
 _A clear and concise description of what the bug is._
 
