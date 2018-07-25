@@ -4,6 +4,7 @@ import com.chattylabs.plugin.internal.GitCommandExecutor
 import com.chattylabs.plugin.model.VersionSettings
 import com.chattylabs.plugin.util.PluginUtil
 import org.gradle.api.Project
+import org.gradle.api.tasks.StopExecutionException
 
 class VersioningTask {
 
@@ -37,15 +38,16 @@ class VersioningTask {
 
         versionPrefix = versioningSetting.getPrefix() ?: ""
 
-        def regEx = "^tags[/]${versionPrefix.replace("/", "[/]")}.*"
+        def versionPattern = "([0-99](\\.[0-99]){2})"
+        def prefix = versionPrefix.replace("/", "\\/")
+        def regEx = "^tags\\/${prefix}${versionPattern}.*"
         GitCommandExecutor.describeTags(versionPrefix, {
             // TODO: Create VersionHelper
             if (it.replace("\n", "").matches(regEx)) {
-                currentVersion = it.replaceFirst("-.*\$", "")
-                        .replaceFirst("^tags[/]${versionPrefix.replace("/", "[/]")}", "")
-                        .replace("\n", "")
+                currentVersion = it.replace("\n", "")
+                        .replaceFirst("^tags\\/${prefix}${versionPattern}.*", "\$1")
             } else {
-                throw new IllegalStateException("There is no such repository version. " +
+                throw new StopExecutionException("There is no such repository version. " +
                         "Have you forgotten to create the first version tag?")
             }
         })

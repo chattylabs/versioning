@@ -3,19 +3,21 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'versioning-plugin'
+
+apply plugin: 'versioning'
 
 versioning {
     versionSetting {
-        tagPrefix "version/"
+        tagPrefix "android-sample-version/"
         majorVersionKeys '[new]'
         minorVersionKeys "[patch]"
         patchVersionKeys "[bug]"
     }
 
-    gitSetting {
-        dir new File("/Users/surtamil/Desktop/Suryavel/GIT/tag_filter")
-    }
+//    gitSetting {
+//        //Optional. You can specify a custom .git folder path
+//        dir new File("../")
+//    }
 }
 
 android {

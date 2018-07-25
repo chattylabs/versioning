@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/android-sample/app/app.iml" filepath="$PROJECT_DIR$/android-sample/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/gradle-versioning-plugin.iml" filepath="$PROJECT_DIR$/.idea/modules/gradle-versioning-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gradle-versioning-plugin.iml" filepath="$PROJECT_DIR$/gradle-versioning-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/versioning-plugin/versioning-plugin.iml" filepath="$PROJECT_DIR$/versioning-plugin/versioning-plugin.iml" />
     </modules>
   </component>
