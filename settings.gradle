@@ -1,4 +1,7 @@
 rootProject.name = 'gradle-versioning-plugin'
 
+include ':app'
+project(':app').projectDir = new File('./android-sample/app')
+
 include ':versioning-plugin'
 project(':versioning-plugin').projectDir = new File('./versioning-plugin')
