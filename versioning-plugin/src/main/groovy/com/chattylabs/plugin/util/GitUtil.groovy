@@ -1,6 +1,10 @@
-package com.chattylabs.plugin.internal
+package com.chattylabs.plugin.util
 
-class GitCommandExecutor {
+import com.chattylabs.plugin.internal.DefaultOnGitCommandFailure
+import com.chattylabs.plugin.internal.OnGitCommandFailure
+import com.chattylabs.plugin.internal.OnGitCommandSuccess
+
+class GitUtil {
 
     static File gitDir = null
 
@@ -22,6 +26,15 @@ class GitCommandExecutor {
 
     static def fetchAll(OnGitCommandSuccess successListener = null, OnGitCommandFailure failureListener = null) {
         executeGitCommand(CommandUtil.processCommands("git fetch --all --prune"), successListener, failureListener)
+    }
+
+    static String getLastTagCommitId(String tagName) {
+        String tagCommit = null
+        revParse(tagName, {
+            tagCommit = it.replace("\n", "")
+        })
+
+        return tagCommit
     }
 
     static def revParse(String pointer,
@@ -57,9 +70,7 @@ class GitCommandExecutor {
     }
 
     static ArrayList<String> getCommitList(String[] msgKeywords, String fromCommit, String toCommit = "HEAD") {
-        String grepCommand = CommandUtil.formGrepTemplate(1, msgKeywords.length)
-        // TODO: Add a logger and print (helpful)
-//        println "Grep -- Command -- $grepCommand \n commit list : $fromCommit..$toCommit"
+        final String grepCommand = CommandUtil.formGrepTemplate(1, msgKeywords.length)
         ArrayList<String> commitList = null
         revList("$fromCommit..$toCommit $grepCommand",
                 msgKeywords, {

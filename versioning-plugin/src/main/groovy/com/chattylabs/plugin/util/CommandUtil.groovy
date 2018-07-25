@@ -1,4 +1,4 @@
-package com.chattylabs.plugin.internal
+package com.chattylabs.plugin.util
 
 import java.util.regex.Pattern
 
@@ -20,8 +20,6 @@ class CommandUtil {
             }
         }
 
-        // TODO: Add a logger and print (helpful)
-//        println "Commands : $commands -- template ${template}"
         return commands ?: template.split(" ").toList()
     }
 

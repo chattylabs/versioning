@@ -7,13 +7,16 @@ import org.gradle.api.Project
 
 class VersioningPlugin implements Plugin<Project> {
 
+    Project mProject
+
     @Override
     void apply(Project project) {
-        loadVersionProperties(project)
+        mProject = project
+        loadVersionProperties()
     }
 
-    def loadVersionProperties(Project project) {
-        project.extensions.create("versioning", VersioningExtension.class,
-                Version.load(PluginUtil.getSavedVersionProperty(project)), project)
+    def loadVersionProperties() {
+        mProject.extensions.create(PluginUtil.GRADLE_EXTENSION_NAME, VersioningExtension.class,
+                Version.load(PluginUtil.getSavedVersionProperty(mProject)), mProject, mProject.objects)
     }
 }

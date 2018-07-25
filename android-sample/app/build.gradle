@@ -7,17 +7,19 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'versioning'
 
 versioning {
-    versionSetting {
-        tagPrefix "android-sample-version/"
-        majorVersionKeys '[new]'
-        minorVersionKeys "[patch]"
-        patchVersionKeys "[bug]"
+
+    tagPrefix "android-sample-version/"
+
+    keywords {
+        major "[new]"
+        minor "[patch]"
+        patch "[bug]"
     }
 
-//    gitSetting {
-//        //Optional. You can specify a custom .git folder path
+    git {
+        //Optional. You can specify a custom .git folder path
 //        dir new File("../")
-//    }
+    }
 }
 
 android {
@@ -26,8 +28,8 @@ android {
         applicationId "nodomain.intouch.versioningsample"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 0
-        versionName versioning.version()
+        versionCode versioning.code()
+        versionName versioning.name()
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

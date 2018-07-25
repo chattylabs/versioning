@@ -31,7 +31,7 @@ class Version {
     }
 
     void setMinor(int minor) {
-        versionMap.put(MINOR, "$minor".toString())
+        versionMap.put(MINOR, String.format("%02d", minor))
     }
 
     String getPatch() {
@@ -39,7 +39,7 @@ class Version {
     }
 
     void setPatch(int patch) {
-        versionMap.put(PATCH, "$patch".toString())
+        versionMap.put(PATCH, String.format("%02d", patch))
     }
 
     String getSdk() {
@@ -67,6 +67,10 @@ class Version {
         return "${this.major}.${this.minor}.${this.patch}"
     }
 
+    int toCode() {
+        return Integer.parseInt("${getSdk()}${getScreen()}${getMajor()}${getMinor()}${getPatch()}")
+    }
+
     static def load(File file) {
         if (!file.exists()) {
             def propertiesToWrite = new Properties()
@@ -80,7 +84,7 @@ class Version {
 
     def save(File file) {
         def properties = new Properties()
-        properties.putAll(versionMap)
+        properties.putAll(getAll())
         properties.store(new FileOutputStream(file), "Version Update")
     }
 }
