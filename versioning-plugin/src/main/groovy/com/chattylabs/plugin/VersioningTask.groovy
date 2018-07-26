@@ -31,11 +31,11 @@ class VersioningTask {
     private void readCurrentVersionTag() {
         def versionPattern = "([0-99](\\.[0-99]){2})"
         def prefix = mVersionPrefix.replace("/", "\\/")
-        def regEx = "^tags\\/${prefix}${versionPattern}.*"
-        GitUtil.describeTags(mVersionPrefix, {
-            if (it.replace("\n", "").matches(regEx)) {
+        def regEx = "^${prefix}${versionPattern}.*\$"
+        GitUtil.checkTags(mVersionPrefix, {
+            if (it.split("\n")[0].matches(regEx)) {
                 mCurrentVersion = it.replace("\n", "")
-                        .replaceFirst("^tags\\/${prefix}${versionPattern}.*", "\$1")
+                        .replaceFirst(regEx, "\$1")
             } else {
                 throw new StopExecutionException("There is no such repository version. " +
                         "Have you forgotten to create the first version tag?")

@@ -12,13 +12,12 @@ plugins {
     id 'java'
     id 'com.gradle.plugin-publish' version '0.9.10'
     id "net.ltgt.apt-idea" version "0.18"
-
 }
 
 apply plugin: 'com.novoda.bintray-release'
 
 project.description 'Gradle project versioning plugin based on Git tags.'
-project.group = 'com.chattylabs.plugin'
+project.group = 'com.chattylabs'
 project.version = '0.17.1'
 project.ext.name = project.name.replace("-plugin", "")
 
@@ -40,11 +39,11 @@ dependencies {
 }
 
 
-println 'Publish: ' +
+println '\nBuild: ' +
         project.group + ':' +
         project.ext.name.toString() + ':' +
         project.version
-println '- ' + project.description
+println '- ' + project.description + '\n'
 
 
 pluginBundle {

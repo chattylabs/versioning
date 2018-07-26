@@ -11,15 +11,15 @@ versioning {
     tagPrefix "android-sample-version/"
 
     keywords {
-        major "[new]"
-        minor "[patch]"
-        patch "[bug]"
+        major "[incompatible]"
+        minor "[feature]"
+        patch "[bug]", "[patch]"
     }
 
-    git {
-        //Optional. You can specify a custom .git folder path
-//        dir new File("../")
-    }
+    //git {
+    //    //Optional. You can specify a custom .git folder path
+    //    dir new File("../other/different/.git/folder")
+    //}
 }
 
 android {

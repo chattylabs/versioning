@@ -14,6 +14,8 @@ class GitUtil {
         }
 
         gitDir = directory
+
+        fetchAll()
     }
 
     static File getGitDir() {
@@ -61,10 +63,11 @@ class GitUtil {
         revList("HEAD", null, successListener, failureListener)
     }
 
-    static def describeTags(String versionPrefix = "",
-                            OnGitCommandSuccess successListener = null,
-                            OnGitCommandFailure failureListener = null) {
-        def commands = CommandUtil.processCommands('git describe --tags --all --always --long --match %1$s[0-99]*',
+    static def checkTags(String versionPrefix = "",
+                         OnGitCommandSuccess successListener = null,
+                         OnGitCommandFailure failureListener = null) {
+        def commands = CommandUtil.processCommands(
+                'git tag -l %1$s[0-99]\\.[0-99]\\.[0-99] --sort=-creatordate',
                 versionPrefix)
         executeGitCommand(commands, successListener, failureListener)
     }

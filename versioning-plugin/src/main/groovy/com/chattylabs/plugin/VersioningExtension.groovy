@@ -23,6 +23,7 @@ class VersioningExtension {
         this.mProject = project
         mLogKeywords = objectFactory.newInstance(LogKeywords)
         mGitSettings = objectFactory.newInstance(GitSettings)
+        GitUtil.setGitDir(new File("./"))
     }
 
     String name() {
@@ -62,7 +63,7 @@ class VersioningExtension {
 
     void git(Action<? super GitSettings> gitAction) {
         gitAction.execute(mGitSettings)
-        GitUtil.setGitDir(mGitSettings.dir() ?: new File("./"))
+        GitUtil.setGitDir(mGitSettings.dir())
     }
 
     GitSettings git() {
