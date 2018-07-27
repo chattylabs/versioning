@@ -14,7 +14,7 @@ class VersionChecker {
     Tuple2<Integer, String> calculateVersion(String[] keywords,
                                              String fromCommit,
                                              boolean optional) {
-        if (keywords == null || keywords.length <= 0) {
+        if (keywords == null || keywords.length == 0) {
             if (optional) {
                 return new Tuple2<Integer, String>(0, mLastTagCommit)
             } else {
