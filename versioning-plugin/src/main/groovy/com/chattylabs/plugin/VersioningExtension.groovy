@@ -19,21 +19,34 @@ class VersioningExtension {
     private Boolean mIsInitialized = false
 
     VersioningExtension(Version version, Project project, ObjectFactory objectFactory) {
-        this.mVersion = version
-        this.mProject = project
+        mVersion = version
+        mProject = project
         mLogKeywords = objectFactory.newInstance(LogKeywords)
         mGitSettings = objectFactory.newInstance(GitSettings)
         GitUtil.setGitDir(new File("./"))
     }
 
+    private void initializeIfRequired() {
+        synchronized (this) {
+            if (!mIsInitialized) {
+                new VersioningTask(mProject).execute()
+                mIsInitialized = true
+            }
+        }
+    }
+
     String name() {
         initializeIfRequired()
-        return this.mVersion.toString()
+        return mVersion.toName()
     }
 
     int code() {
         initializeIfRequired()
-        return this.mVersion.toCode()
+        return mVersion.toCode()
+    }
+
+    Version version() {
+        return mVersion
     }
 
     void tagPrefix(String prefix) {
@@ -42,15 +55,6 @@ class VersioningExtension {
 
     String tagPrefix() {
         return mTagPrefix
-    }
-
-    void initializeIfRequired() {
-        synchronized (this) {
-            if (!mIsInitialized) {
-                new VersioningTask(mProject).execute()
-                mIsInitialized = true
-            }
-        }
     }
 
     void keywords(Action<? super LogKeywords> kAction) {
@@ -68,9 +72,5 @@ class VersioningExtension {
 
     GitSettings git() {
         return mGitSettings
-    }
-
-    Version version() {
-        return mVersion
     }
 }

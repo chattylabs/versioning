@@ -5,6 +5,7 @@ import com.chattylabs.plugin.model.LogKeywords
 import com.chattylabs.plugin.util.GitUtil
 import com.chattylabs.plugin.util.PluginUtil
 import com.chattylabs.plugin.util.StringUtil
+import com.chattylabs.plugin.util.VersionHandler
 import org.gradle.api.Project
 import org.gradle.api.tasks.StopExecutionException
 
@@ -25,7 +26,7 @@ class VersioningTask {
 
     void execute() {
         readCurrentVersionTag()
-        calculateNewVersion()
+        processNewVersionElements(getNewVersionElements())
     }
 
     private void readCurrentVersionTag() {
@@ -43,17 +44,37 @@ class VersioningTask {
         })
     }
 
-    private void calculateNewVersion() {
+    private void processNewVersionElements(List<Integer> newVersionElements) {
+        if (newVersionElements.shouldUpdateProperties()) {
+            Integer[] currentVersion = StringUtil.splitVersion(mCurrentVersion)
+            VersionHandler versionHandler = new VersionHandler(currentVersion)
+            versionHandler.increaseVersionBy(0, newVersionElements[0])
+            versionHandler.increaseVersionBy(1, newVersionElements[1])
+            versionHandler.increaseVersionBy(2, newVersionElements[2])
+            mVersioningExtension.version().setMajor(versionHandler.getVersion(0))
+            mVersioningExtension.version().setMinor(versionHandler.getVersion(1))
+            mVersioningExtension.version().setPatch(versionHandler.getVersion(2))
+            mVersioningExtension.version().save(PluginUtil.getSavedVersionProperty(this.mProject))
+            println("Current Version: ${currentVersion}\n" +
+                    "New Version: ${mVersioningExtension.version().toName()}")
+        }
+    }
+
+    private List<Integer> getNewVersionElements() {
         final VersionChecker versionChecker = new VersionChecker("$mVersionPrefix$mCurrentVersion")
-        int[] currentVersion = StringUtil.splitVersion(mCurrentVersion)
         def newMajorVersion = versionChecker.calculateVersion(mLogKeywords.getMajor(), true)
         def newMinorVersion = versionChecker.calculateVersion(mLogKeywords.getMinor(), newMajorVersion.getSecond())
         def newPatchVersion = versionChecker.calculateVersion(mLogKeywords.getPatch(), newMinorVersion.getSecond())
-        mVersioningExtension.version().setMajor(currentVersion[0] + newMajorVersion.getFirst())
-        mVersioningExtension.version().setMinor(currentVersion[1] + newMinorVersion.getFirst())
-        mVersioningExtension.version().setPatch(currentVersion[2] + newPatchVersion.getFirst())
-        mVersioningExtension.version().save(PluginUtil.getSavedVersionProperty(this.mProject))
+        def newVersionElements = [newMajorVersion.getFirst(), newMinorVersion.getFirst(), newPatchVersion.getFirst()]
+        newVersionElements.metaClass.shouldUpdateProperties = {
+            for (int element : delegate) {
+                if (element > 0) {
+                    return true
+                }
+            }
 
-        println("new Version --- ${mVersioningExtension.version().toString()}")
+            return false
+        }
+        return newVersionElements
     }
 }

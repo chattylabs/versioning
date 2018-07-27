@@ -1,6 +1,10 @@
 package com.chattylabs.plugin.model
 
+import com.chattylabs.plugin.util.StringUtil
+
 class Version {
+
+    private static final int PREFIX_DIGIT_LEN = 2
 
     static String MAJOR = "major"
     static String MINOR = "minor"
@@ -11,11 +15,11 @@ class Version {
     private final Map<String, String> versionMap = new HashMap<>()
 
     Version(Properties properties) {
-        versionMap.put(MAJOR, properties.getProperty(MAJOR, "0"))
-        versionMap.put(MINOR, properties.getProperty(MINOR, "1"))
-        versionMap.put(PATCH, properties.getProperty(PATCH, "0"))
-        versionMap.put(SDK, properties.getProperty(SDK, "0"))
-        versionMap.put(SCREEN, properties.getProperty(SCREEN, "0"))
+        versionMap.put(MAJOR, properties.getProperty(MAJOR))
+        versionMap.put(MINOR, properties.getProperty(MINOR))
+        versionMap.put(PATCH, properties.getProperty(PATCH))
+        versionMap.put(SDK, properties.getProperty(SDK))
+        versionMap.put(SCREEN, properties.getProperty(SCREEN))
     }
 
     String getMajor() {
@@ -23,7 +27,7 @@ class Version {
     }
 
     void setMajor(int major) {
-        versionMap.put(MAJOR, "$major".toString())
+        versionMap.put(MAJOR, StringUtil.formatNumber(major, PREFIX_DIGIT_LEN))
     }
 
     String getMinor() {
@@ -31,7 +35,7 @@ class Version {
     }
 
     void setMinor(int minor) {
-        versionMap.put(MINOR, String.format("%02d", minor))
+        versionMap.put(MINOR, StringUtil.formatNumber(minor, PREFIX_DIGIT_LEN))
     }
 
     String getPatch() {
@@ -39,7 +43,7 @@ class Version {
     }
 
     void setPatch(int patch) {
-        versionMap.put(PATCH, String.format("%02d", patch))
+        versionMap.put(PATCH, StringUtil.formatNumber(patch, PREFIX_DIGIT_LEN))
     }
 
     String getSdk() {
@@ -47,7 +51,7 @@ class Version {
     }
 
     void setSdk(int sdk) {
-        versionMap.put(SDK, "$sdk".toString())
+        versionMap.put(SDK, StringUtil.formatNumber(sdk, PREFIX_DIGIT_LEN))
     }
 
     String getScreen() {
@@ -55,16 +59,15 @@ class Version {
     }
 
     void setScreen(int screen) {
-        versionMap.put(SCREEN, "$screen".toString())
+        versionMap.put(SCREEN, StringUtil.formatNumber(screen, PREFIX_DIGIT_LEN))
     }
 
     Map<String, String> getAll() {
         return versionMap.asImmutable()
     }
 
-    @Override
-    String toString() {
-        return "${this.major}.${this.minor}.${this.patch}"
+    String toName() {
+        return "${this.major.toInteger()}.${this.minor.toInteger()}.${this.patch.toInteger()}"
     }
 
     int toCode() {
