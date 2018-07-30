@@ -55,8 +55,7 @@ class VersioningTask {
             mVersioningExtension.version().setMinor(versionHandler.getVersion(1))
             mVersioningExtension.version().setPatch(versionHandler.getVersion(2))
             mVersioningExtension.version().save(PluginUtil.getSavedVersionProperty(this.mProject))
-            println("Current Version: ${currentVersion}\n" +
-                    "New Version: ${mVersioningExtension.version().toName()}")
+            println("Upgraded version from ${currentVersion} to ${mVersioningExtension.version().toName()}.")
         }
     }
 
