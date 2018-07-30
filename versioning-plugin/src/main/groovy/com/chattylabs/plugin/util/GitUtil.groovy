@@ -72,6 +72,32 @@ class GitUtil {
         executeGitCommand(commands, successListener, failureListener)
     }
 
+    static def createTag(String tagName) {
+        executeGitCommand(CommandUtil.processCommands("git tag $tagName"))
+    }
+
+    static boolean isTagExists(String tagName) {
+        boolean hasTag = false
+        executeGitCommand(CommandUtil.processCommands("git tag -l $tagName"), {
+            hasTag = it.contains(tagName)
+        })
+        return hasTag
+    }
+
+    static def pushTags() {
+        // TODO: Need to check why success message comes part of failure
+        executeGitCommand(CommandUtil.processCommands("git push --tags"), null, new DefaultOnGitCommandFailure() {
+            @Override
+            void onFailure(String text) {
+                if (text.contains("[new ")) {
+                    println "\n$text"
+                    return
+                }
+                super.onFailure(text)
+            }
+        })
+    }
+
     static ArrayList<String> getCommitList(String[] msgKeywords, String fromCommit, String toCommit = "HEAD") {
         final String grepCommand = CommandUtil.formGrepTemplate(1, msgKeywords.length)
         ArrayList<String> commitList = null
@@ -87,7 +113,7 @@ class GitUtil {
                                           OnGitCommandFailure failureListener = new DefaultOnGitCommandFailure()) {
         def successOutput = new StringBuilder()
         def failureOutput = new StringBuilder()
-        def process = commandToExecute.execute(new String[0], getGitDir())
+        def process = commandToExecute.execute(null, getGitDir())
         process.waitForProcessOutput(successOutput, failureOutput)
         if (!failureOutput.toString().isEmpty() && failureListener != null) {
             failureListener.onFailure(failureOutput.toString())
