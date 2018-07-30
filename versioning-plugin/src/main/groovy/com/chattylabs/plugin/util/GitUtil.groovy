@@ -72,6 +72,14 @@ class GitUtil {
         executeGitCommand(commands, successListener, failureListener)
     }
 
+    static def createTag(String tagName) {
+        executeGitCommand(CommandUtil.processCommands("git tag $tagName"))
+    }
+
+    static def pushTags() {
+        executeGitCommand(CommandUtil.processCommands("git push --tags"))
+    }
+
     static ArrayList<String> getCommitList(String[] msgKeywords, String fromCommit, String toCommit = "HEAD") {
         final String grepCommand = CommandUtil.formGrepTemplate(1, msgKeywords.length)
         ArrayList<String> commitList = null

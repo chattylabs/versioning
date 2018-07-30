@@ -2,7 +2,7 @@ package com.chattylabs.plugin.internal
 
 final class DefaultOnGitCommandFailure implements OnGitCommandFailure {
 
-    protected DefaultOnGitCommandFailure() {}
+    DefaultOnGitCommandFailure() {}
 
     @Override
     void onFailure(String text) {
