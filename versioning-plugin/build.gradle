@@ -11,7 +11,6 @@ plugins {
     id 'groovy'
     id 'java'
     id 'com.gradle.plugin-publish' version '0.9.10'
-    id "net.ltgt.apt-idea" version "0.18"
 }
 
 apply plugin: 'com.novoda.bintray-release'
