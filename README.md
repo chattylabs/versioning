@@ -68,19 +68,13 @@ Configure the required and optional values in your gradle file
     
 ## How to use?
 
-**Once the plugin is applied, build the project.**
+**<u>Once the plugin is applied</u>, build the project.**
 
 The version name and version code are now available wherever you need them.
 
     project.version = versioning.name() // generates "0.1.0"  - string
 
 _Android example_
- 
-    versioning {
-     
-        ...
-     
-    }
      
     android {
         
@@ -108,16 +102,27 @@ gradle releaseVersion // This will store a new tag on your remote repository as 
 **We recommend strongly to only run this through a continuous integration server like Circleci, Travis, Bitrise, etc...**
 
 
-## Notes
+## Warning Notes
 
-You must **create an initial version tag in your repository** following the `tagPrefix` value you 
-have configured with the `current version` the project is on. Otherwise the build will throw and Exception.
+You must **create an initial version tag in your repository** with the `tagPrefix` and the `current version` of the project. 
+Otherwise the build will throw an Exception.
     
 ```bash
 git tag <tagPrefix + current version>   // i.e. "version/0.1.0" or "v0.1.0"
  
-git push origin --tags
+git push origin <tagPrefix + current version>
 ```
+
+The versioning configuration block must be applied before to use its exposed methods.
+
+    versioning {
+        
+        // you must include and configure this block before to call versioning.code() or versioning.name()
+        
+    }
+     
+    project.version = versioning.name() // now it works, otherwise it will throw an Exception
+
 
 The only rule to increase the version is that you add the proper keyword into the commit message
 
