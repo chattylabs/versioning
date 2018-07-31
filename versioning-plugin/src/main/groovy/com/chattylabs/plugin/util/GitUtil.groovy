@@ -85,17 +85,7 @@ class GitUtil {
     }
 
     static def pushTags() {
-        // TODO: Need to check why success message comes part of failure
-        executeGitCommand(CommandUtil.processCommands("git push --tags"), null, new DefaultOnGitCommandFailure() {
-            @Override
-            void onFailure(String text) {
-                if (text.contains("[new ")) {
-                    println "\n$text"
-                    return
-                }
-                super.onFailure(text)
-            }
-        })
+        executeGitCommand(CommandUtil.processCommands("git push --tags -q"))
     }
 
     static ArrayList<String> getCommitList(String[] msgKeywords, String fromCommit, String toCommit = "HEAD") {
