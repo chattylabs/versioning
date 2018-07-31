@@ -74,8 +74,14 @@ The version name and version code are now available wherever you need them.
 
     project.version = versioning.name() // generates "0.1.0"  - string
 
-_Android_
-
+_Android example_
+ 
+    versioning {
+     
+        ...
+     
+    }
+     
     android {
         
         defaultConfig {
@@ -87,7 +93,7 @@ _Android_
         }
     }
     
-_iOS sample_
+_iOS example_
  
  <br/>...pending...
  <br/> 
@@ -97,7 +103,7 @@ _iOS sample_
 When you are ok with the final version, your tests have passed, and you are ready to release, then run
 
 ```bash
-gradle versionRelease // This will store a new tag on your remote repository as of <tagPrefix><version>
+gradle releaseVersion // This will store a new tag on your remote repository as of <tagPrefix><version>
 ```
 **We recommend strongly to only run this through a continuous integration server like Circleci, Travis, Bitrise, etc...**
 
