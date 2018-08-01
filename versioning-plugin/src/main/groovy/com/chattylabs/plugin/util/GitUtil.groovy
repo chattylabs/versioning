@@ -84,8 +84,8 @@ class GitUtil {
         return hasTag
     }
 
-    static def pushTags() {
-        executeGitCommand(CommandUtil.processCommands("git push --tags -q"))
+    static def pushTags(String tagName) {
+        executeGitCommand(CommandUtil.processCommands("git push origin $tagName -q"))
     }
 
     static ArrayList<String> getCommitList(String[] msgKeywords, String fromCommit, String toCommit = "HEAD") {

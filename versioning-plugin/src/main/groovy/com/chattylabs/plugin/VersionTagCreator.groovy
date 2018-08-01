@@ -16,7 +16,7 @@ class VersionTagCreator extends DefaultTask {
         def tagName = generateTagName()
         if (!GitUtil.isTagExists(tagName)) {
             GitUtil.createTag(tagName)
-            GitUtil.pushTags()
+            GitUtil.pushTags(tagName)
             println "Tag $tagName created."
         }
     }
