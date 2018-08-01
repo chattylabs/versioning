@@ -89,10 +89,15 @@ _Android example_
     
 _iOS example_
  
- <br/>...pending...
- <br/> 
- <br/>
- <br/>
+    afterEvaluate {
+        
+        // Use some (JVM) plist library such as Apache's common configuration http://commons.apache
+        .org/proper/commons-configuration/ to update info.plist
+        
+        infoPlist.set(CFBundleShortVersionString, versioning.name())
+        infoPlist.set(CFBundleVersion, "${versioning.code()}")
+        
+    }
 
 When you are ok with the final version, your tests have passed, and you are ready to release, then run
 
