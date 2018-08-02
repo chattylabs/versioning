@@ -50,7 +50,7 @@ and add-on based components, you only need to establish a specific `tagPrefix` p
         }
     }
         
-    apply plugin: 'versioning'
+    apply plugin: 'com.chattylabs.versioning'
       
 Configure the required and optional values in your gradle file
  
@@ -104,10 +104,10 @@ When you are ok with the final version, your tests have passed, and you are read
 ```bash
 gradle releaseVersion // This will store a new tag on your remote repository as of <tagPrefix><version>
 ```
-**We recommend strongly to only run this through a continuous integration server like Circleci, Travis, Bitrise, etc...**
+**We recommend strongly to only run this through a continuous integration server like CircleCi, Travis, Bitrise, etc...**
 
 
-## Warning Notes
+## Important Notes
 
 You must **create an initial version tag in your repository** with the `tagPrefix` and the `current version` of the project. 
 Otherwise the build will throw an Exception.
@@ -145,4 +145,4 @@ git commit -m "ISSUE-100 [feature] ..." // This will increase the minor version 
 [02]: https://coveralls.io/repos/chattylabs/versioning/badge.svg?branch=master&service=github
 [1]: https://semver.org/
 [2]: https://developer.android.com/google/play/publishing/multiple-apks#VersionCodes
-[3]: http://gradle.org/plugin/directory
+[3]: https://plugins.gradle.org/plugin/com.chattylabs.versioning
