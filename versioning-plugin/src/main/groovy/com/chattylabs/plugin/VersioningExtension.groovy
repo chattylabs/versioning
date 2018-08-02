@@ -29,7 +29,7 @@ class VersioningExtension {
     private void initializeIfRequired() {
         synchronized (this) {
             if (!mIsInitialized) {
-                new VersioningTask(mProject).execute()
+                new VersioningTask(mProject).execute(mVersion.needsInitialUpdate(), false)
                 mIsInitialized = true
             }
         }

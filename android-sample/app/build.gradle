@@ -1,3 +1,13 @@
+//buildscript {
+//    repositories {
+//        mavenLocal()
+//    }
+//
+//    dependencies {
+//        classpath 'com.chattylabs:versioning:0.18.1'
+//    }
+//}
+
 plugins {
     id "com.chattylabs.versioning" version "0.18.1"
 }
@@ -7,6 +17,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'com.chattylabs.versioning'
 
 versioning {
 

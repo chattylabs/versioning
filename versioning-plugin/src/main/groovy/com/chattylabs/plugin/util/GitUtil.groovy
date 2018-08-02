@@ -14,8 +14,6 @@ class GitUtil {
         }
 
         gitDir = directory
-
-        fetchAll()
     }
 
     static File getGitDir() {

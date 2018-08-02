@@ -1,6 +1,7 @@
 package com.chattylabs.plugin
 
 import com.chattylabs.plugin.util.GitUtil
+import com.chattylabs.plugin.util.PluginUtil
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
@@ -8,7 +9,7 @@ class VersionTagCreator extends DefaultTask {
 
     @Override
     String getGroup() {
-        return "versioning"
+        return PluginUtil.TASK_GROUP
     }
 
     @TaskAction

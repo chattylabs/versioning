@@ -19,5 +19,6 @@ class VersioningPlugin implements Plugin<Project> {
         mProject.extensions.create(PluginUtil.GRADLE_EXTENSION_NAME, VersioningExtension.class,
                 Version.load(PluginUtil.getSavedVersionProperty(mProject)), mProject, mProject.objects)
         mProject.tasks.create("releaseVersion", VersionTagCreator.class)
+        mProject.tasks.create("updateVersion", UpdateVersionTask.class)
     }
 }
