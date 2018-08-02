@@ -6,7 +6,9 @@ class PluginUtil {
 
     static final String GRADLE_EXTENSION_NAME = "versioning"
 
+    static final String TASK_GROUP = "versioning"
+
     static File getSavedVersionProperty(Project project) {
-        return new File("${project.getProjectDir().absolutePath}/versioning.properties")
+        return new File("${project.getProjectDir().absolutePath}/version.properties")
     }
 }

@@ -12,58 +12,60 @@ class Version {
     static String SDK = "sdk"
     static String SCREEN = "screen"
 
-    private final Map<String, String> versionMap = new HashMap<>()
+    private final Map<String, String> mVersionMap = new HashMap<>()
+    private boolean mNeedsUpdate
 
-    Version(Properties properties) {
-        versionMap.put(MAJOR, properties.getProperty(MAJOR))
-        versionMap.put(MINOR, properties.getProperty(MINOR))
-        versionMap.put(PATCH, properties.getProperty(PATCH))
-        versionMap.put(SDK, properties.getProperty(SDK))
-        versionMap.put(SCREEN, properties.getProperty(SCREEN))
+    Version(Properties properties, boolean needsUpdate) {
+        mVersionMap.put(MAJOR, properties.getProperty(MAJOR))
+        mVersionMap.put(MINOR, properties.getProperty(MINOR))
+        mVersionMap.put(PATCH, properties.getProperty(PATCH))
+        mVersionMap.put(SDK, properties.getProperty(SDK))
+        mVersionMap.put(SCREEN, properties.getProperty(SCREEN))
+        mNeedsUpdate = needsUpdate
     }
 
     String getMajor() {
-        return versionMap.get(MAJOR)
+        return mVersionMap.get(MAJOR)
     }
 
     void setMajor(int major) {
-        versionMap.put(MAJOR, StringUtil.formatNumber(major, PREFIX_DIGIT_LEN))
+        mVersionMap.put(MAJOR, StringUtil.formatNumber(major, PREFIX_DIGIT_LEN))
     }
 
     String getMinor() {
-        return versionMap.get(MINOR)
+        return mVersionMap.get(MINOR)
     }
 
     void setMinor(int minor) {
-        versionMap.put(MINOR, StringUtil.formatNumber(minor, PREFIX_DIGIT_LEN))
+        mVersionMap.put(MINOR, StringUtil.formatNumber(minor, PREFIX_DIGIT_LEN))
     }
 
     String getPatch() {
-        return versionMap.get(PATCH)
+        return mVersionMap.get(PATCH)
     }
 
     void setPatch(int patch) {
-        versionMap.put(PATCH, StringUtil.formatNumber(patch, PREFIX_DIGIT_LEN))
+        mVersionMap.put(PATCH, StringUtil.formatNumber(patch, PREFIX_DIGIT_LEN))
     }
 
     String getSdk() {
-        return versionMap.get(SDK)
+        return mVersionMap.get(SDK)
     }
 
     void setSdk(int sdk) {
-        versionMap.put(SDK, StringUtil.formatNumber(sdk, PREFIX_DIGIT_LEN))
+        mVersionMap.put(SDK, StringUtil.formatNumber(sdk, PREFIX_DIGIT_LEN))
     }
 
     String getScreen() {
-        return versionMap.get(SCREEN)
+        return mVersionMap.get(SCREEN)
     }
 
     void setScreen(int screen) {
-        versionMap.put(SCREEN, StringUtil.formatNumber(screen, PREFIX_DIGIT_LEN))
+        mVersionMap.put(SCREEN, StringUtil.formatNumber(screen, PREFIX_DIGIT_LEN))
     }
 
     Map<String, String> getAll() {
-        return versionMap.asImmutable()
+        return mVersionMap.asImmutable()
     }
 
     String toName() {
@@ -74,15 +76,22 @@ class Version {
         return Integer.parseInt("${getSdk()}${getScreen()}${getMajor()}${getMinor()}${getPatch()}")
     }
 
+    boolean needsInitialUpdate() {
+        return mNeedsUpdate
+    }
+
     static def load(File file) {
+        boolean needsUpdate = false
         if (!file.exists()) {
             def propertiesToWrite = new Properties()
             propertiesToWrite.load(Version.class.getResourceAsStream("/file/default_version.properties"))
             propertiesToWrite.store(new FileOutputStream(file), "Default write")
+            needsUpdate = true
         }
+
         def properties = new Properties()
         properties.load(new FileInputStream(file))
-        return new Version(properties)
+        return new Version(properties, needsUpdate)
     }
 
     def save(File file) {

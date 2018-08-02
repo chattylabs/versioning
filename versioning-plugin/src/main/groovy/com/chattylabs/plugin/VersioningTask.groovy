@@ -24,23 +24,40 @@ class VersioningTask {
         mLogKeywords = mVersioningExtension.keywords()
     }
 
-    void execute() {
-        readCurrentVersionTag()
-        processNewVersionElements(getNewVersionElements())
+    void execute(boolean initialUpdate, boolean shouldUpdateVersion) {
+        if (initialUpdate || shouldUpdateVersion) {
+            readCurrentVersionTag()
+            doInitialUpdate()
+        }
+
+        if (shouldUpdateVersion) {
+            processNewVersionElements(getNewVersionElements())
+        }
+    }
+
+    private void doInitialUpdate() {
+        Integer[] currentVersion = StringUtil.splitVersion(mCurrentVersion)
+        mVersioningExtension.version().setMajor(currentVersion[0])
+        mVersioningExtension.version().setMinor(currentVersion[1])
+        mVersioningExtension.version().setPatch(currentVersion[2])
+        mVersioningExtension.version().save(PluginUtil.getSavedVersionProperty(this.mProject))
     }
 
     private void readCurrentVersionTag() {
         def versionPattern = "([0-99](\\.[0-99]){2})"
         def prefix = mVersionPrefix.replace("/", "\\/")
         def regEx = "^${prefix}${versionPattern}.*\$"
-        GitUtil.checkTags(mVersionPrefix, {
-            if (it.split("\n")[0].matches(regEx)) {
-                mCurrentVersion = it.replace("\n", "")
-                        .replaceFirst(regEx, "\$1")
-            } else {
-                throw new StopExecutionException("There is no such repository version. " +
-                        "Have you forgotten to create the first version tag?")
-            }
+        GitUtil.fetchAll({
+            GitUtil.checkTags(mVersionPrefix, {
+                if (it.split("\n")[0].matches(regEx)) {
+                    mCurrentVersion = it.replace("\n", "")
+                            .replaceFirst(regEx, "\$1")
+                    println "Current Version: $mCurrentVersion"
+                } else {
+                    throw new StopExecutionException("There is no such repository version. " +
+                            "Have you forgotten to create the first version tag?")
+                }
+            })
         })
     }
 
@@ -76,4 +93,5 @@ class VersioningTask {
         }
         return newVersionElements
     }
+
 }
