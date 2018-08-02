@@ -10,14 +10,15 @@ buildscript {
 plugins {
     id 'groovy'
     id 'java'
-    id 'com.gradle.plugin-publish' version '0.9.10'
+    id 'java-gradle-plugin'
+    id 'com.gradle.plugin-publish' version '0.10.0'
 }
 
 apply plugin: 'com.novoda.bintray-release'
 
 project.description 'Gradle project versioning plugin based on Git tags.'
 project.group = 'com.chattylabs'
-project.version = '0.17.1'
+project.version = '0.18.0'
 project.ext.name = project.name.replace("-plugin", "")
 
 sourceCompatibility = JavaVersion.VERSION_1_8
