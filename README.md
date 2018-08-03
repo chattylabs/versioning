@@ -28,7 +28,7 @@ after you merge a PR or when you integrate any changes onto your `master` branch
 happen through a continuous integration system.
 
 Besides, it works very well with multi-module projects, various libraries in the same repository
-and add-on based components, you only need to establish a specific `tagPrefix` per module/version.
+and add-on based components, see the end of this README file for more info.
 
 
 ## How to apply?
@@ -138,6 +138,22 @@ git commit -m "ISSUE-100 [feature] ..." // This will increase the minor version 
  
 ...
 ```
+
+If you have various projects/modules into the same repository, and you want to generate a different 
+version per project/module, you only need to establish a specific `tagPrefix` per module/version.
+<br/>Also you have to differentiate the projects/modules commits by a unique **keyword**.
+
+    versioning {
+            
+        tagPrefix "${project.name}-version/"      // Use a unique prefix for multiple modules
+            
+        keywords {
+        
+            ...
+            
+            minor "[${project.name}-feature]"     // Use a unique keyword for the commits
+        }
+    }
 
 &nbsp;
 
