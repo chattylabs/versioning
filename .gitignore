@@ -153,3 +153,4 @@ android-sample/app/build/
 **/build
 **/out
 
+version.properties
