@@ -1,6 +1,8 @@
 buildscript {
     repositories {
         mavenLocal()
+        maven { url  "https://dl.bintray.com/chattylabs/maven" }
+        jcenter()
     }
 
     dependencies {
