@@ -54,7 +54,7 @@ class VersioningTask {
                             .replaceFirst(regEx, "\$1")
                     println "Current Version: $mCurrentVersion"
                 } else {
-                    throw new StopExecutionException("There is no such repository version [\"${mVersionPrefix}\"]." +
+                    throw new StopExecutionException("There is no version tag with the prefix \"${mVersionPrefix}\". " +
                             "Have you forgotten to create the first version tag?")
                 }
             })
