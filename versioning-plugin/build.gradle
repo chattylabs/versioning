@@ -17,7 +17,7 @@ apply plugin: 'com.novoda.bintray-release'
 
 project.description 'Gradle project versioning plugin based on Git tags.'
 project.group = 'com.chattylabs'
-project.version = '0.19.2'
+project.version = '0.19.3'
 project.ext.name = project.name.replace("-plugin", "")
 
 sourceCompatibility = JavaVersion.VERSION_1_8

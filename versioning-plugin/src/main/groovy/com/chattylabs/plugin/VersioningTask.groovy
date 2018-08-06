@@ -2,6 +2,7 @@ package com.chattylabs.plugin
 
 import com.chattylabs.plugin.internal.VersionChecker
 import com.chattylabs.plugin.model.LogKeywords
+import com.chattylabs.plugin.model.Version
 import com.chattylabs.plugin.util.GitUtil
 import com.chattylabs.plugin.util.PluginUtil
 import com.chattylabs.plugin.util.StringUtil
@@ -24,23 +25,22 @@ class VersioningTask {
         mLogKeywords = mVersioningExtension.keywords()
     }
 
-    void execute(boolean initialUpdate, boolean shouldUpdateVersion) {
-        if (initialUpdate || shouldUpdateVersion) {
-            readCurrentVersionTag()
-            doInitialUpdate()
-        }
-
-        if (shouldUpdateVersion) {
-            processNewVersionElements(getNewVersionElements())
-        }
+    void updateVersionProperties() {
+        initializeVersionProperties(mVersioningExtension.version())
+        processNewVersionElements(getNewVersionElements())
     }
 
-    private void doInitialUpdate() {
+    void initializeVersionProperties(Version initialVersion) {
+        readCurrentVersionTag()
+        doInitialUpdate(initialVersion)
+    }
+
+    private void doInitialUpdate(Version version) {
         Integer[] currentVersion = StringUtil.splitVersion(mCurrentVersion)
-        mVersioningExtension.version().setMajor(currentVersion[0])
-        mVersioningExtension.version().setMinor(currentVersion[1])
-        mVersioningExtension.version().setPatch(currentVersion[2])
-        mVersioningExtension.version().save(PluginUtil.getSavedVersionProperty(this.mProject))
+        version.setMajor(currentVersion[0])
+        version.setMinor(currentVersion[1])
+        version.setPatch(currentVersion[2])
+        version.save(PluginUtil.getSavedVersionProperty(this.mProject))
     }
 
     private void readCurrentVersionTag() {
@@ -93,5 +93,4 @@ class VersioningTask {
         }
         return newVersionElements
     }
-
 }

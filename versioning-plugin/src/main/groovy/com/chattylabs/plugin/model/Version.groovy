@@ -1,6 +1,9 @@
 package com.chattylabs.plugin.model
 
+import com.chattylabs.plugin.VersioningTask
+import com.chattylabs.plugin.util.PluginUtil
 import com.chattylabs.plugin.util.StringUtil
+import org.gradle.api.Project
 
 class Version {
 
@@ -13,15 +16,13 @@ class Version {
     static String SCREEN = "screen"
 
     private final Map<String, String> mVersionMap = new HashMap<>()
-    private boolean mNeedsUpdate
 
-    Version(Properties properties, boolean needsUpdate) {
+    Version(Properties properties) {
         mVersionMap.put(MAJOR, properties.getProperty(MAJOR))
         mVersionMap.put(MINOR, properties.getProperty(MINOR))
         mVersionMap.put(PATCH, properties.getProperty(PATCH))
         mVersionMap.put(SDK, properties.getProperty(SDK))
         mVersionMap.put(SCREEN, properties.getProperty(SCREEN))
-        mNeedsUpdate = needsUpdate
     }
 
     String getMajor() {
@@ -76,22 +77,20 @@ class Version {
         return Integer.parseInt("${getSdk()}${getScreen()}${getMajor()}${getMinor()}${getPatch()}")
     }
 
-    boolean needsInitialUpdate() {
-        return mNeedsUpdate
-    }
-
-    static def load(File file) {
-        boolean needsUpdate = false
+    static def load(Project project) {
+        File file = PluginUtil.getSavedVersionProperty(project)
         if (!file.exists()) {
+            // File doesn't exist. Fetch the current tag and create property file from it.
             def propertiesToWrite = new Properties()
             propertiesToWrite.load(Version.class.getResourceAsStream("/file/default_version.properties"))
-            propertiesToWrite.store(new FileOutputStream(file), "Default write")
-            needsUpdate = true
+            Version currentVersion = new Version(propertiesToWrite)
+            new VersioningTask(project).initializeVersionProperties(currentVersion)
+            return currentVersion
         }
 
         def properties = new Properties()
         properties.load(new FileInputStream(file))
-        return new Version(properties, needsUpdate)
+        return new Version(properties)
     }
 
     def save(File file) {
