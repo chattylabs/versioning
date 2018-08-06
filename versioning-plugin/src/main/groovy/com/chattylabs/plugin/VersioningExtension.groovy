@@ -10,42 +10,40 @@ import org.gradle.api.model.ObjectFactory
 
 class VersioningExtension {
 
-    String mTagPrefix
+    private String mTagPrefix
     private LogKeywords mLogKeywords
     private GitSettings mGitSettings
-
     private Version mVersion
     private Project mProject
-    private Boolean mIsInitialized = false
 
-    VersioningExtension(Version version, Project project, ObjectFactory objectFactory) {
-        mVersion = version
+    VersioningExtension(Project project, ObjectFactory objectFactory) {
         mProject = project
         mLogKeywords = objectFactory.newInstance(LogKeywords)
         mGitSettings = objectFactory.newInstance(GitSettings)
         GitUtil.setGitDir(new File("./"))
     }
 
-    private void initializeIfRequired() {
+    private void initialize() {
         synchronized (this) {
-            if (!mIsInitialized) {
-                new VersioningTask(mProject).execute(mVersion.needsInitialUpdate(), false)
-                mIsInitialized = true
+            if (mVersion == null) {
+                // Load Version From Property File
+                mVersion = Version.load(mProject)
             }
         }
     }
 
     String name() {
-        initializeIfRequired()
-        return mVersion.toName()
+        return version().toName()
     }
 
     int code() {
-        initializeIfRequired()
-        return mVersion.toCode()
+        return version().toCode()
     }
 
     Version version() {
+        if (mVersion == null) {
+            initialize()
+        }
         return mVersion
     }
 

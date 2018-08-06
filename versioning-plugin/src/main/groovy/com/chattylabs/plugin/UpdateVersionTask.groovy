@@ -13,6 +13,6 @@ class UpdateVersionTask extends DefaultTask {
 
     @TaskAction
     void performTask() {
-        new VersioningTask(project).execute(false, true)
+        new VersioningTask(project).updateVersionProperties()
     }
 }
