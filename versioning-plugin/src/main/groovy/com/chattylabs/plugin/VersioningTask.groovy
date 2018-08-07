@@ -44,15 +44,21 @@ class VersioningTask {
     }
 
     private void readCurrentVersionTag() {
-        def versionPattern = "([0-99](\\.[0-99]){2})"
+        def versionPattern = "([0-9]?[0-9](\\.[0-9]?[0-9]){2})"
         def prefix = mVersionPrefix.replace("/", "\\/")
         def regEx = "^${prefix}${versionPattern}.*\$"
         GitUtil.fetchAll({
             GitUtil.checkTags(mVersionPrefix, {
+                if (PluginUtil.DEBUG) {
+                    println(it)
+                    println(prefix)
+                    println(regEx)
+                    println(it.split("\n")[0])
+                }
                 if (it.split("\n")[0].matches(regEx)) {
                     mCurrentVersion = it.replace("\n", "")
                             .replaceFirst(regEx, "\$1")
-                    println "Current Version: $mCurrentVersion"
+                    println "[${mProject.getName()}] version: $mCurrentVersion"
                 } else {
                     throw new StopExecutionException("There is no version tag with the prefix \"${mVersionPrefix}\". " +
                             "Have you forgotten to create the first version tag?")
@@ -72,7 +78,7 @@ class VersioningTask {
             mVersioningExtension.version().setMinor(versionHandler.getVersion(1))
             mVersioningExtension.version().setPatch(versionHandler.getVersion(2))
             mVersioningExtension.version().save(PluginUtil.getSavedVersionProperty(this.mProject))
-            println("Upgraded version from ${currentVersion} to ${mVersioningExtension.version().toName()}.")
+            println("[${mProject.getName()}] upgraded version from ${currentVersion} to ${mVersioningExtension.version().toName()}.")
         }
     }
 
