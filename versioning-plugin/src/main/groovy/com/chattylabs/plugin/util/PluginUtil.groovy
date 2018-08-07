@@ -4,6 +4,8 @@ import org.gradle.api.Project
 
 class PluginUtil {
 
+    static final DEBUG = false
+
     static final String GRADLE_EXTENSION_NAME = "versioning"
 
     static final String TASK_GROUP = "versioning"
