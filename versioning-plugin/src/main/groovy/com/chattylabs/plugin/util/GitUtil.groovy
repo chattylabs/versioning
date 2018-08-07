@@ -25,7 +25,7 @@ class GitUtil {
     }
 
     static def fetchAll(OnGitCommandSuccess successListener = null, OnGitCommandFailure failureListener = null) {
-        executeGitCommand(CommandUtil.processCommands("git fetch --all --prune"), successListener, failureListener)
+        executeGitCommand(CommandUtil.processCommands("git fetch --tags --all --prune"), successListener, failureListener)
     }
 
     static String getLastTagCommitId(String tagName) {
