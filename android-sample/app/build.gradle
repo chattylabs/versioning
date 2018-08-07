@@ -1,12 +1,11 @@
 buildscript {
     repositories {
-        mavenLocal()
-        maven { url  "https://dl.bintray.com/chattylabs/maven" }
         jcenter()
     }
 
     dependencies {
-        classpath 'com.chattylabs:versioning:+'
+        classpath fileTree(include: ['*.jar'], dir: '../../versioning-plugin/build/libs')
+        classpath files('../../versioning-plugin/build/libs/versioning-plugin-*.jar')
     }
 }
 
