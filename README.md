@@ -64,11 +64,6 @@ Setup the required and optional values in your gradle file.
             minor "[feature]"           // Required
             patch "[bug]", "[patch]"    // Required
         }
-        
-        git { // Optional. You can specify a custom .git folder path
-        
-            dir new File("../another/different/.git/folder")
-        }
     }
 
 The plugin will generate a `version.properties` file within the project's module.
@@ -209,6 +204,18 @@ version per project/module, you only need to establish a specific `tagPrefix` pe
             ...
             
             minor "[${project.name}-feature]"     // Use a unique keyword for the commits
+        }
+    }
+    
+**Extras**
+
+You can setup a different `.git` folder by applying the following option:
+
+    versioning {
+
+        git { // Optional. You can specify a custom .git folder path
+        
+            dir new File("../another/different/.git/folder")
         }
     }
 
