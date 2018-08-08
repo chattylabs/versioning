@@ -5,7 +5,6 @@ buildscript {
 
     dependencies {
         classpath fileTree(include: ['*.jar'], dir: '../../versioning-plugin/build/libs')
-        classpath files('../../versioning-plugin/build/libs/versioning-plugin-*.jar')
     }
 }
 
