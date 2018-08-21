@@ -103,7 +103,9 @@ class GitUtil {
         def failureOutput = new StringBuilder()
         def process = commandToExecute.execute(null, getGitDir())
         process.waitForProcessOutput(successOutput, failureOutput)
-        if (!failureOutput.toString().isEmpty() && failureListener != null) {
+        String error = failureOutput.toString()
+        String warning = "Warning"
+        if (!error.isEmpty() && !error.startsWith(warning) && failureListener != null) {
             failureListener.onFailure(failureOutput.toString())
         } else if (successListener != null) {
             successListener.onSuccess(successOutput.toString())
