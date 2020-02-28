@@ -18,9 +18,9 @@ class VersionHandler {
         }
 
         mVersions[index] += version
-        if (mVersions[index] > 99 && index > 0) {
-            increaseVersionBy(index - 1, 1)
-        }
+        //if (mVersions[index] > 99 && index > 0) {
+        //    increaseVersionBy(index - 1, 1)
+        //}
     }
 
     Integer getVersion(int index) {
