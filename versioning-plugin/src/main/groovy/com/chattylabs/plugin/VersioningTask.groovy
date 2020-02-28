@@ -44,7 +44,7 @@ class VersioningTask {
     }
 
     private void readCurrentVersionTag() {
-        def versionPattern = "([0-9]?[0-9](\\.[0-9]?[0-9]){2})"
+        def versionPattern = "([0-9]*[0-9](\\.[0-9]*[0-9]){2})"
         def prefix = mVersionPrefix.replace("/", "\\/")
         def regEx = "^${prefix}${versionPattern}.*\$"
         GitUtil.fetchAll({
