@@ -40,6 +40,10 @@ class VersioningExtension {
         return version().toCode()
     }
 
+    int computedVersionCode() {
+        return version().toComputedVersionCode()
+    }
+
     Version version() {
         if (mVersion == null) {
             initialize()
