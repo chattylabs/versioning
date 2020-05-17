@@ -36,11 +36,14 @@ class VersioningTask {
     }
 
     private void doInitialUpdate(Version version) {
-        Integer[] currentVersion = StringUtil.splitVersion(mCurrentVersion)
-        version.setMajor(currentVersion[0])
-        version.setMinor(currentVersion[1])
-        version.setPatch(currentVersion[2])
-        version.save(PluginUtil.getSavedVersionProperty(this.mProject))
+        GitUtil.revListCount({
+            Integer[] currentVersion = StringUtil.splitVersion(mCurrentVersion)
+            version.setMajor(currentVersion[0])
+            version.setMinor(currentVersion[1])
+            version.setPatch(currentVersion[2])
+            version.setRevList(Integer.parseInt(it.replace("\n", "")))
+            version.save(PluginUtil.getSavedVersionProperty(this.mProject))
+        })
     }
 
     private void readCurrentVersionTag() {

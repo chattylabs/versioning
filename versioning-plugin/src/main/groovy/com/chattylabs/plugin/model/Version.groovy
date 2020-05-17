@@ -14,6 +14,7 @@ class Version {
     static String PATCH = "patch"
     static String SDK = "sdk"
     static String SCREEN = "screen"
+    static String REV_LIST = "revList"
 
     private final Map<String, String> mVersionMap = new HashMap<>()
 
@@ -23,6 +24,7 @@ class Version {
         mVersionMap.put(PATCH, properties.getProperty(PATCH))
         mVersionMap.put(SDK, properties.getProperty(SDK))
         mVersionMap.put(SCREEN, properties.getProperty(SCREEN))
+        mVersionMap.put(REV_LIST, properties.getProperty(REV_LIST))
     }
 
     String getMajor() {
@@ -65,6 +67,14 @@ class Version {
         mVersionMap.put(SCREEN, StringUtil.formatNumber(screen, PREFIX_DIGIT_LEN))
     }
 
+    String getRevList() {
+        return mVersionMap.get(REV_LIST)
+    }
+
+    void setRevList(int revList) {
+        mVersionMap.put(REV_LIST, String.valueOf(revList))
+    }
+
     Map<String, String> getAll() {
         return mVersionMap.asImmutable()
     }
@@ -76,6 +86,8 @@ class Version {
     int toCode() {
         return Integer.parseInt("${getSdk()}${getScreen()}${getMajor()}${getMinor()}${getPatch()}")
     }
+
+    int toComputedVersionCode() {return Integer.parseInt(getRevList())}
 
     static def load(Project project) {
         File file = PluginUtil.getSavedVersionProperty(project)

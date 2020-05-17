@@ -61,6 +61,11 @@ class GitUtil {
         revList("HEAD", null, successListener, failureListener)
     }
 
+    static def revListCount(OnGitCommandSuccess successListener = null,
+                       OnGitCommandFailure failureListener = null) {
+        revList("HEAD --count", null, successListener, failureListener)
+    }
+
     static def checkTags(String versionPrefix = "",
                          OnGitCommandSuccess successListener = null,
                          OnGitCommandFailure failureListener = null) {

@@ -18,6 +18,7 @@ class VersionHandler {
         }
 
         mVersions[index] += version
+        // Skipping this step so that we allow more than 99
         //if (mVersions[index] > 99 && index > 0) {
         //    increaseVersionBy(index - 1, 1)
         //}
