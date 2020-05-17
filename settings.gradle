@@ -1,7 +1,9 @@
+rootProject.name = 'versioning'
+
 include ':versioning-plugin'
 project(':versioning-plugin').projectDir = new File('./versioning-plugin')
 
-def lib = file("../../versioning-plugin/build/libs")
+def lib = file("./versioning-plugin/build/libs")
 if(lib.exists()){
     include ':app'
     project(':app').projectDir = new File('./android-sample/app')
